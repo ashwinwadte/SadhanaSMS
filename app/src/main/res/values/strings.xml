@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Sadhana SMS</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">Sadhana SMS</string>
+    <string name="wake_up_time">Wake up time</string>
+    <string name="day_rest_duration">Day rest duration</string>
+    <string name="to_bed_time">To bed time</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_profile">Edit Profile</string>
+    <string name="japa_completion">Japa completion time</string>
+    <string name="hearing">Hearing duration</string>
+    <string name="reading">Reading duration</string>
+    <string name="study">Study duration</string>
+    <string name="service_duration">Service duration</string>
+    <string name="service_type">Service type</string>
+    <string name="sleep_time">Everyday sleeping time</string>
+</resources>

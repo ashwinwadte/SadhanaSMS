@@ -1,0 +1,109 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ashwin.sadhanasms.LoginFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Your name"
+                android:inputType="textPersonName|textCapWords" />
+
+            <EditText
+                android:id="@+id/etCounselorName"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Counselor Name"
+                android:inputType="textPersonName|textCapWords" />
+
+            <EditText
+                android:id="@+id/etContact"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etCounselorName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/textView"
+                android:layout_toRightOf="@+id/textView"
+                android:ems="10"
+                android:hint="Counselor Mob No."
+                android:inputType="phone" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/etCounselorName"
+                android:layout_alignStart="@+id/etCounselorName"
+                android:layout_alignTop="@+id/etContact"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="12dp"
+                android:text="+91"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/etCounselorName"
+                android:layout_alignStart="@+id/etCounselorName"
+                android:layout_below="@+id/etContact"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Sleeping Time:"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvSleepTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etContact"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/textView3"
+                android:ems="10"
+                android:hint="@string/sleep_time"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvSleepTime"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:hint="You will get notification at this time"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/bSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView4"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Save" />
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
