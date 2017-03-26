@@ -13,7 +13,8 @@
     <string name="hearing">Hearing duration</string>
     <string name="reading">Reading duration</string>
     <string name="study">Study duration</string>
-    <string name="service_duration">Service duration</string>
+    <string name="is_duration">Internal Service duration</string>
+    <string name="ps_duration">Preaching Service duration</string>
     <string name="service_type">Service type</string>
     <string name="sleep_time">Everyday sleeping time</string>
 </resources>

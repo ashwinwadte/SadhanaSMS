@@ -1,5 +1,6 @@
 package com.ashwin.sadhanasms;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,9 +8,11 @@ import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,8 +40,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     static View rootView;
     // Use the current date as the default date in the picker
     final Calendar c = Calendar.getInstance();
-    TextView WU, DR, TB, Japa, Hearing, Reading, Study, ServiceTime;
-    EditText ServiceType, SentBy;
+    TextView WU, DR, TB, JAPA, HR, RE, IS, PS;
+    EditText SentBy;
     DbHelper db;
     Cursor cursor;
     DialogFragment newFragment;
@@ -62,19 +65,19 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
         if (hrs == 0) {
             hrs += 12;
-            am_pa = "AM";
+            am_pa = "am";
         } else if (hrs == 12) {
-            am_pa = "PM";
+            am_pa = "pm";
         } else if (hrs > 12) {
             hrs -= 12;
-            am_pa = "PM";
+            am_pa = "pm";
         } else
-            am_pa = "AM";
+            am_pa = "am";
 
         if (mins == 0)
             time = hrs + am_pa;
         else
-            time = hrs + ":" + pad(mins) + am_pa;
+            time = hrs + "." + pad(mins) + am_pa;
 
         ((TextView) rootView.findViewById(id)).setText(time);
     }
@@ -86,11 +89,11 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         if (hrs == 0 && mins == 0) {
             time = String.valueOf(0);
         } else if (hrs == 0 && mins > 0) {
-            time = mins + "min";
+            time = mins + "m";
         } else if (hrs > 0 && mins == 0) {
-            time = hrs + "hrs";
+            time = hrs + "h";
         } else if (hrs > 0 && mins > 0) {
-            time = hrs + ":" + mins + "hrs";
+            time = hrs + "h" + mins + "m";
         }
 
         ((TextView) rootView.findViewById(id)).setText(time);
@@ -125,7 +128,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                builder.setMessage("Do you want to really send?").setPositiveButton("Send", MainActivityFragment.this).setNegativeButton("Cancel", null);
+                builder.setMessage("Are you sure?").setPositiveButton("Send", MainActivityFragment.this).setNegativeButton("Cancel", null);
 
                 AlertDialog sendDialog = builder.create();
                 sendDialog.show();
@@ -221,22 +224,21 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         WU = (TextView) rootView.findViewById(R.id.tvWakeUp);
         DR = (TextView) rootView.findViewById(R.id.tvDayRest);
         TB = (TextView) rootView.findViewById(R.id.tvToBed);
-        Japa = (TextView) rootView.findViewById(R.id.tvJapa);
-        Hearing = (TextView) rootView.findViewById(R.id.tvHearing);
-        Reading = (TextView) rootView.findViewById(R.id.tvReading);
-        Study = (TextView) rootView.findViewById(R.id.tvStudy);
-        ServiceTime = (TextView) rootView.findViewById(R.id.tvServiceTime);
-        ServiceType = (EditText) rootView.findViewById(R.id.etServiceType);
+        JAPA = (TextView) rootView.findViewById(R.id.tvJapa);
+        RE = (TextView) rootView.findViewById(R.id.tvReading);
+        HR = (TextView) rootView.findViewById(R.id.tvHearing);
+        IS = (TextView) rootView.findViewById(R.id.tvIServiceTime);
+        PS = (TextView) rootView.findViewById(R.id.tvPServiceTime);
         SentBy = (EditText) rootView.findViewById(R.id.etSentBy);
 
         WU.setOnClickListener(this);
         DR.setOnClickListener(this);
         TB.setOnClickListener(this);
-        Japa.setOnClickListener(this);
-        Hearing.setOnClickListener(this);
-        Reading.setOnClickListener(this);
-        Study.setOnClickListener(this);
-        ServiceTime.setOnClickListener(this);
+        JAPA.setOnClickListener(this);
+        HR.setOnClickListener(this);
+        RE.setOnClickListener(this);
+        IS.setOnClickListener(this);
+        PS.setOnClickListener(this);
 
         SentBy.setText(cursor.getString(cursor.getColumnIndex(DbHelper.COLUMN_NAME)));
     }
@@ -253,7 +255,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                 args.putInt("id", R.id.tvWakeUp);
 
                 time[0] = 3;
-                time[1] = 45;
+                time[1] = 30;
                 args.putIntArray(BUNDLE_KEY, time);
 
                 newFragment.setArguments(args);
@@ -307,21 +309,6 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                 newFragment.show(getActivity().getFragmentManager(), "timePicker");
                 break;
 
-            case R.id.tvHearing:
-                newFragment = new DurationPickerFragment();
-
-                args = new Bundle();
-                args.putInt("id", R.id.tvHearing);
-
-                time[0] = 0;
-                time[1] = 30;
-                args.putIntArray(BUNDLE_KEY, time);
-
-                newFragment.setArguments(args);
-
-                newFragment.show(getActivity().getFragmentManager(), "durationPicker");
-                break;
-
             case R.id.tvReading:
                 newFragment = new DurationPickerFragment();
 
@@ -337,14 +324,14 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                 newFragment.show(getActivity().getFragmentManager(), "durationPicker");
                 break;
 
-            case R.id.tvStudy:
+            case R.id.tvHearing:
                 newFragment = new DurationPickerFragment();
 
                 args = new Bundle();
-                args.putInt("id", R.id.tvStudy);
+                args.putInt("id", R.id.tvHearing);
 
-                time[0] = 2;
-                time[1] = 0;
+                time[0] = 0;
+                time[1] = 30;
                 args.putIntArray(BUNDLE_KEY, time);
 
                 newFragment.setArguments(args);
@@ -352,11 +339,26 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                 newFragment.show(getActivity().getFragmentManager(), "durationPicker");
                 break;
 
-            case R.id.tvServiceTime:
+
+            case R.id.tvIServiceTime:
                 newFragment = new DurationPickerFragment();
 
                 args = new Bundle();
-                args.putInt("id", R.id.tvServiceTime);
+                args.putInt("id", R.id.tvIServiceTime);
+
+                time[0] = 0;
+                time[1] = 30;
+                args.putIntArray(BUNDLE_KEY, time);
+
+                newFragment.setArguments(args);
+
+                newFragment.show(getActivity().getFragmentManager(), "durationPicker");
+                break;
+            case R.id.tvPServiceTime:
+                newFragment = new DurationPickerFragment();
+
+                args = new Bundle();
+                args.putInt("id", R.id.tvPServiceTime);
 
                 time[0] = 0;
                 time[1] = 30;
@@ -375,26 +377,62 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         String contact = cursor.getString(cursor.getColumnIndex(DbHelper.COLUMN_CONTACT_NO));
 
         String textBody = "HK Pr. Pamho" +
-                "\nWU:" + WU.getText().toString() +
-                "\nDR:" + DR.getText().toString() +
-                "\nTB:" + TB.getText().toString() +
-                "\nJapa:" + Japa.getText().toString() +
-                "\nHearing:" + Hearing.getText().toString() +
-                "\nReading:" + Reading.getText().toString() +
-                "\nStudy:" + Study.getText().toString() +
-                "\nService:" + ServiceTime.getText().toString() + "(" + ServiceType.getText().toString() + ")" +
-                "\nYS " + SentBy.getText().toString();
+                "\nWU - " + WU.getText().toString() +
+                "\nDR - " + DR.getText().toString() +
+                "\nTB - " + TB.getText().toString() +
+                "\nJAPA - " + JAPA.getText().toString() +
+                "\nRE - " + RE.getText().toString() +
+                "\nHR - " + HR.getText().toString() +
+                "\nIS - " + IS.getText().toString() +
+                "\nPS - " + PS.getText().toString() +
+                "\nYS\n" + SentBy.getText().toString();
 
 
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(contact, null, textBody, null, null);
+        sendSMS(contact, textBody);
 
-            Toast.makeText(getContext(), "SMS sent\nHari Bol!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Hari Hari!!\nSMS failed to send :(", Toast.LENGTH_SHORT).show();
-        }
+    }
 
+    private void sendSMS(String phoneNumber, String messageBody){
+        String SMS_SENT = "SMS_SENT";
+        String SMS_DELIVERED = "SMS_DELIVERED";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(getContext(), 0, new Intent(SMS_SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(getContext(), 0, new Intent(SMS_DELIVERED), 0);
+
+        //When the sms has been sent
+        getContext().registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getContext(), "SMS sent successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getContext(), "Service is currently unavailable", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new IntentFilter(SMS_SENT));
+
+        //When the sms is delivered
+        getContext().registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getContext(), "SMS delivered successfully", Toast.LENGTH_SHORT).show();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(getContext(), "SMS not delivered", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getContext(), "Service is currently unavailable", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new IntentFilter(SMS_DELIVERED));
+
+        //get the default instance of sms manager
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, messageBody, sentPI, deliveredPI);
     }
 
     public interface OnMainActivityFragmentInteractionListener {
